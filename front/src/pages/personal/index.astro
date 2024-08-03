@@ -1,0 +1,40 @@
+---
+import Navbar from "../../components/Navbar.astro"
+import Layout from "../../layout/Layout.astro"
+
+import axios from "axios"
+
+//Create a query to fetch the data
+// const response = await axios.get("http://localhost:3000/api/personal")
+// const personal = response.data
+
+//Create a object with 3 users with name and email properties
+const personal = [
+  { id: "1", name: "John Doe", email: "asd@gmail.com" },
+  { id: "2", name: "Jane Doe", email: "asdasd@gmail.com" },
+  { id: "3", name: "John Smith", email: "asdas.com  " },
+]
+
+
+---
+
+<Layout title="Personal">
+    <Navbar />
+  <div class="mx-auto lg:max-w-screen-lg mt-4">
+    <h1 class="font-bold text-2xl mb-4">Personal</h1>
+    <p>
+      En esta sección podrás ver información sobre el personal de la biblioteca.
+    </p>
+    <ul>
+        {personal.map((person) => (
+            <li class="flex space-x-4">
+                <h2>{person.id}</h2>
+                <h2>{person.name}</h2>
+                <p>{person.email}</p>
+                <a href=`/personal/${person.id}` >Vamos a revisar</a>
+            </li>
+        ))}
+    </ul>
+    <a href="/personal/crear" class="bg-blue-500 text-white font-semibold p-2 rounded-full inline-flex mt-4">Quiero crear personal</a>
+  </div>
+</Layout>

@@ -1,0 +1,21 @@
+---
+import Navbar from "../../components/Navbar.astro"
+import Layout from "../../layout/Layout.astro"
+
+interface Params {
+    id: string;
+}
+
+const { id } = Astro.params;
+
+---
+
+<Layout title="Personal">
+    <Navbar />
+  <div class="mx-auto lg:max-w-screen-lg mt-4">
+    <h1 class="font-bold text-2xl mb-4">Personal</h1>
+    <p>
+      En esta sección podrás ver información sobre el personal de la biblioteca con ID {id}.
+    </p>
+  </div>
+</Layout>
