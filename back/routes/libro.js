@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
         facultad: req.body.facultad,
         ejemplaresTotales: req.body.ejemplaresTotales,
         edicion: req.body.edicion,
-        numerosPaginas: req.body.numerosPaginas,
+        numeroPaginas: req.body.numeroPaginas,
         precioLibro: req.body.precioLibro,
         estadoLibro: req.body.estadoLibro
     });
@@ -63,7 +63,7 @@ router.put('/:libroId', async (req, res) => {
                 facultad: req.body.facultad,
                 ejemplaresTotales: req.body.ejemplaresTotales,
                 edicion: req.body.edicion,
-                numerosPaginas: req.body.numerosPaginas,
+                numeroPaginas: req.body.numeroPaginas,
                 precioLibro: req.body.precioLibro,
                 estadoLibro: req.body.estadoLibro
             } }
