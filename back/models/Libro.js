@@ -37,7 +37,7 @@ const LibroSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    numerosPaginas: {
+    numeroPaginas: {
         type: Number,
         required: true
     },
