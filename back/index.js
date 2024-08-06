@@ -3,6 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import connectToDatabase from './db/db.js';
+import { PORT } from './config.js';
+import EstadoUsuario from './models/EstadoUsuario.js';
 
 //Import APIs
 import usuario from './routes/usuario.js';
@@ -19,7 +21,7 @@ const app = express();
 connectToDatabase()
 
 //Settings
-app.set("port", process.env.PORT || 3001);
+app.set("port", PORT || 3001);
 
 
 
@@ -30,6 +32,7 @@ app.use(morgan('dev'));
 
 //Routes
 app.use("/api/usuario", usuario)
+
 // app.use("/api/user", user)
 // app.use("/api/category", category)
 // app.use("/api/file", file)
