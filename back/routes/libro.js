@@ -32,9 +32,10 @@ router.post('/', async (req, res) => {
         IDCategoria: req.body.IDCategoria,
         IDEditorial: req.body.IDEditorial,
         anioPublicacion: req.body.anioPublicacion,
-        ejemplaresDisponibles: req.body.ejemplaresDisponibles,
+        ejemplaresTotales: req.body.ejemplaresTotales,
         edicion: req.body.edicion,
         numeroPaginas: req.body.numeroPaginas,
+        precioLibro: req.body.precioLibro,
         estadoLibro: req.body.estadoLibro
     });
 
@@ -58,9 +59,10 @@ router.put('/:libroId', async (req, res) => {
                 IDCategoria: req.body.IDCategoria,
                 IDEditorial: req.body.IDEditorial,
                 anioPublicacion: req.body.anioPublicacion,
-                ejemplaresDisponibles: req.body.ejemplaresDisponibles,
+                ejemplaresTotales: req.body.ejemplaresTotales,
                 edicion: req.body.edicion,
                 numeroPaginas: req.body.numeroPaginas,
+                precioLibro: req.body.precioLibro,
                 estadoLibro: req.body.estadoLibro
             } }
         );

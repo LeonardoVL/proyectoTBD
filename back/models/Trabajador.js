@@ -5,6 +5,10 @@ const TrabajadorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    apellido: {
+        type: String,
+        required: true
+    },
     inicioTurno: {
         type: Array,
         required: true

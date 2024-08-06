@@ -25,7 +25,7 @@ const LibroSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    ejemplaresDisponibles: {
+    ejemplaresTotales: {
         type: Number,
         required: true
     },
@@ -34,6 +34,10 @@ const LibroSchema = new mongoose.Schema({
         required: true
     },
     numerosPaginas: {
+        type: Number,
+        required: true
+    },
+    precioLibro: {
         type: Number,
         required: true
     },

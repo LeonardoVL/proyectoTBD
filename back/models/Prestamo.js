@@ -28,6 +28,10 @@ const PrestamoSchema = new mongoose.Schema({
     estadoDevolucion: {
         type: String,
         required: true
+    },
+    deterioro: {
+        type: String,
+        required: true
     }
 }, {
     collection: 'Prestamo',

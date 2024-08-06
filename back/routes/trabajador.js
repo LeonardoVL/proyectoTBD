@@ -27,6 +27,7 @@ router.get('/:trabajadorId', async (req, res) => {
 router.post('/', async (req, res) => {
     const trabajador = new Trabajador({
         nombre: req.body.nombre,
+        apellido: req.body.apellido,
         inicioTurno: req.body.inicioTurno,
         finTurno: req.body.finTurno,
         IDTipoUsuario: req.body.IDTipoUsuario,
@@ -48,6 +49,7 @@ router.put('/:trabajadorId', async (req, res) => {
             { _id: req.params.trabajadorId },
             { $set: { 
                 nombre: req.body.nombre,
+                apellido: req.body.apellido,
                 inicioTurno: req.body.inicioTurno,
                 finTurno: req.body.finTurno,
                 IDTipoUsuario: req.body.IDTipoUsuario,
