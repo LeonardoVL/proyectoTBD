@@ -4,15 +4,17 @@ import cors from 'cors';
 import morgan from 'morgan';
 import connectToDatabase from './db/db.js';
 import { PORT } from './config.js';
-import EstadoUsuario from './models/EstadoUsuario.js';
 
 //Import APIs
 import usuario from './routes/usuario.js';
-// import user from './routes/user.js';
-// import category from './routes/category.js';
-// import file from './routes/file.js';
-// import institution from './routes/institution.js';
-// import auth from './routes/auth.js';
+import autor from './routes/autor.js'
+import categoria from './routes/categoria.js'
+import editorial from './routes/editorial.js'
+import estadousuario from './routes/estadousuario.js'
+import libro from './routes/libro.js'
+import prestamo from './routes/prestamo.js'
+import tipousuario from './routes/tipousuario.js'
+import trabajador from './routes/trabajador.js'
 
 //Init app
 const app = express();
@@ -32,12 +34,14 @@ app.use(morgan('dev'));
 
 //Routes
 app.use("/api/usuario", usuario)
-
-// app.use("/api/user", user)
-// app.use("/api/category", category)
-// app.use("/api/file", file)
-// app.use("/api/institution",institution)
-// app.use("/api/auth", auth)
+app.use("/api/autor", autor)
+app.use("/api/categoria", categoria)
+app.use("/api/editorial", editorial)
+app.use("/api/estadousuario", estadousuario)
+app.use("/api/libro", libro)
+app.use("/api/prestamo", prestamo)
+app.use("/api/tipousuario", tipousuario)
+app.use("/api/trabajador", trabajador)
 
 //Start server
 app.listen(app.get("port"), () => {
