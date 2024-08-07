@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
         fechaSalida: req.body.fechaSalida,
         fechaMaxDevolucion: req.body.fechaMaxDevolucion,
         fechaDevolucion: req.body.fechaDevolucion,
-        estadoDevolucion: req.body.estadoDevolucion,
+        estadoPrestamo: req.body.estadoPrestamo,
         deterioro: req.body.deterioro
     });
 
@@ -56,7 +56,7 @@ router.put('/:prestamoId', async (req, res) => {
                 fechaSalida: req.body.fechaSalida,
                 fechaMaxDevolucion: req.body.fechaMaxDevolucion,
                 fechaDevolucion: req.body.fechaDevolucion,
-                estadoDevolucion: req.body.estadoDevolucion,
+                estadoPrestamo: req.body.estadoPrestamo,
                 deterioro: req.body.deterioro
             } }
         );

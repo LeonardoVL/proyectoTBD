@@ -32,6 +32,7 @@ router.post('/', async (req, res) => {
         IDTipoUsuario: req.body.IDTipoUsuario,
         IDTipoEstado: req.body.IDTipoEstado,
         domicilio: req.body.domicilio,
+        facultad: req.body.facultad,
         correo: req.body.correo,
         telefono: req.body.telefono,
         fechaNacimiento: req.body.fechaNacimiento,
