@@ -25,10 +25,6 @@ const LibroSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    facultad: {
-        type: String,
-        required: true
-    },
     ejemplaresTotales: {
         type: Number,
         required: true
