@@ -25,6 +25,10 @@ const UsuarioSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    facultad: {
+        type: String,
+        required: true
+    },
     correo: {
         type: String,
         required: true
