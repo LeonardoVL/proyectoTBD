@@ -23,7 +23,7 @@ const PrestamoSchema = new mongoose.Schema({
     },
     fechaDevolucion: {
         type: Date,
-        required: true
+        required: false
     },
     estadoDevolucion: {
         type: String,
