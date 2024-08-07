@@ -9,6 +9,10 @@ const TrabajadorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    correoTrabajador: {
+        type: String,
+        required: true
+    },
     inicioTurno: {
         type: Array,
         required: true
