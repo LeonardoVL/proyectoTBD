@@ -14,7 +14,7 @@ const TrabajadorSchema = new mongoose.Schema({
         required: true
     },
     inicioTurno: {
-        type: Array,
+        type: String,
         required: true
     },
     finTurno: {
