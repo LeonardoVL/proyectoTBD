@@ -1,13 +1,32 @@
 ---
-import Layout from "../layout/Layout.astro";
-import Navbar from "../components/Navbar.astro";
+import Navbar from "../../components/Navbar.astro"
+import Layout from "../../layout/Layout.astro"
+
+import axios from "axios"
+
+import Title from "../../components/Title"
+import AddUser from "../../components/AddUser"
+import AddWorker from "../../components/AddWorker"
+import AddTypeUser from "../../components/AddTypeUser"
+import AddStateUser from "../../components/AddStateUser"
+import UsersList from "../../components/UsersList"
+import WorkersList from "../../components/WorkersList"
 
 ---
 
-<Layout title="Home">
-	<Navbar />
-  <h1>Welcome to Astro</h1>
-  <p>
-	Astro is a new kind of static site builder that delivers lightning-fast performance with a modern developer experience.
-  </p>
+<Layout title="Personal">
+    <Navbar />
+    <div class="mx-auto max-w-screen-xl mt-8 mb-10">
+      <Title title={"Gestión de Usuarios"} />
+      <div class="grid grid-cols-12 gap-5">
+        <AddUser />
+        <AddTypeUser />
+        <AddWorker />
+        <AddStateUser />
+        <UsersList />
+        <WorkersList />
+
+
+      </div>
+    </div>
 </Layout>

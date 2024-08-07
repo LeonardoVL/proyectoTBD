@@ -1,0 +1,23 @@
+---
+import Navbar from "../../components/Navbar.astro"
+import Layout from "../../layout/Layout.astro"
+
+import axios from "axios"
+
+import Title from "../../components/Title"
+import InfoUser from "../../components/InfoUser"
+import GraphUser from "../../components/GraphUser"
+import HistoryLoan from "../../components/HistoryLoan"
+---
+
+<Layout title="Personal">
+    <Navbar />
+    <div class="mx-auto max-w-screen-xl mt-8 mb-10">
+      <Title title={"Fernando Alfaro Ttito"} />
+      <div class="grid grid-cols-12 gap-5">
+        <InfoUser id={"123"} />
+        <GraphUser />
+        <HistoryLoan />
+      </div>
+    </div>
+</Layout>
