@@ -1,6 +1,8 @@
 import express from 'express';
 import Usuario from '../models/Usuario.js';
 import { calcularMulta } from '../queries.js';
+import TipoUsuario from '../models/TipoUsuario.js';
+import EstadoUsuario from '../models/EstadoUsuario.js';
 
 const router = express.Router();
 
@@ -8,7 +10,39 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const users = await Usuario.find();
-        res.json(users);
+
+        const usersWithTypes = await Promise.all(users.map(async (user) => {
+            const tipoUsuario = await TipoUsuario.findById(user.IDTipoUsuario);
+            const tipoEstado = await EstadoUsuario.findById(user.IDTipoEstado);
+            console.log(tipoEstado)
+
+            return {
+                ...user._doc,  // Desestructurar los campos del usuario
+                tipoUsuarioNombre: tipoUsuario ? tipoUsuario.tipoUsuario : null,
+                tipoEstadoNombre: tipoEstado ? tipoEstado.tipoUsuario : null,
+            };
+        }));
+
+        res.json(usersWithTypes);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+//GET: Get a user
+router.get('/:userId', async (req, res) => {
+    try {
+        const user = await Usuario.findById(req.params.userId).lean();
+        const tipoUsuario = await TipoUsuario.findById(user.IDTipoUsuario);
+        const tipoEstado = await EstadoUsuario.findById(user.IDTipoEstado);
+        console.log(tipoEstado)
+
+        user.tipoUsuarioNombre = tipoUsuario ? tipoUsuario.tipoUsuario : null;
+        user.tipoEstadoNombre = tipoEstado ? tipoEstado.tipoUsuario : null;
+
+        console.log(user)
+
+        res.json(user);
     } catch (error) {
         res.json({ message: error });
     }
@@ -24,16 +58,6 @@ router.get('/multas', async (req, res) => {
     }
 });
 
-//GET: Get a user
-router.get('/:userId', async (req, res) => {
-    try {
-        const user = await Usuario.findById(req.params.userId);
-        res.json(user);
-    } catch (error) {
-        res.json({ message: error });
-    }
-});
-
 //POST: Create a user
 router.post('/', async (req, res) => {
     const user = new Usuario({
@@ -42,8 +66,8 @@ router.post('/', async (req, res) => {
         DNI: req.body.DNI,
         IDTipoUsuario: req.body.IDTipoUsuario,
         IDTipoEstado: req.body.IDTipoEstado,
-        domicilio: req.body.domicilio,
         facultad: req.body.facultad,
+        domicilio: req.body.domicilio,
         correo: req.body.correo,
         telefono: req.body.telefono,
         fechaNacimiento: req.body.fechaNacimiento,

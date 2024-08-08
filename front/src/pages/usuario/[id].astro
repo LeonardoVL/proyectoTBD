@@ -8,16 +8,24 @@ import Title from "../../components/Title"
 import InfoUser from "../../components/InfoUser"
 import GraphUser from "../../components/GraphUser"
 import HistoryLoan from "../../components/HistoryLoan"
+
+interface Params {
+  id: string
+}
+
+const { id } = Astro.params;
+
+console.log(id)
 ---
 
 <Layout title="Personal">
     <Navbar />
     <div class="mx-auto max-w-screen-xl mt-8 mb-10">
-      <Title title={"Fernando Alfaro Ttito"} />
+      <!-- <Title title={"Fernando Alfaro Ttito"} /> -->
       <div class="grid grid-cols-12 gap-5">
-        <InfoUser id={"123"} />
-        <GraphUser client:load />
-        <HistoryLoan />
+        <InfoUser id={id} client:load />
+        <GraphUser id={id} client:load />
+        <HistoryLoan id={id} client:load />
       </div>
     </div>
 </Layout>
