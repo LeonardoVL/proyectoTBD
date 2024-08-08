@@ -1,8 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SubTitle from './SubTitle'
 import './../utils/style.css'
 
+import axios from 'axios'
+
 const UsersList = () => {
+  //make the same changes as in AddTypeUser.jsx
+  const [listUser, setListUser] = useState([])
+  const [newUser, setNewUser] = useState(false)
+  const [nameUser, setNameUser] = useState('')
+  // Función para obtener los usuarios
+  const getUser = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/usuario')
+      setListUser(response.data)
+      console.log(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  // useEffect para obtener los usuarios
+  useEffect(() => {
+    getUser()
+  }, [newUser])
+
+  
+
+
   return (
     <div className='col-span-6 bg-[#FFFFF0] rounded-md drop-shadow-md p-4 '>
       <form action="" className=''>
@@ -28,17 +52,19 @@ const UsersList = () => {
         </div>
         <div className='  rounded-lg'>
         <ul className='overflow-y-scroll max-h-56 flex-col space-y-4 py-4  scrollable-list'>
-            {Array.from({ length: 10 }).map((_, index) => (
-              <li className='grid grid-cols-6 gap-2 border-b border-gray-400 pb-1' key={index}>
-                <span className='w-full col-span-4'>Edit {index + 1}</span>
+            {
+            listUser === 0 ? <p>No hay usuarios</p> :
+            listUser.map((user, index) => (
+              <li className='grid grid-cols-6 gap-2 border-b border-gray-400 pb-1' key={user._id}>
+                <span className='w-full col-span-4'>{user.nombres + " " + user.apellidos + " (" + user.tipoUsuarioNombre + ")"}</span>
                 <div className='w-full flex justify-center'>
-                  <div className='bg-red-500 text-white px-2 py-1 rounded-full'>
-                    <i className="fa-solid fa-ban"></i>
+                  <div className='bg-green-500 text-white px-2 py-1 rounded-full'>
+                    {user.tipoEstadoNombre}
                   </div>
                 </div>
                 <div className='w-full flex justify-center'>
                     <button className=' bg-sky-500 text-white px-2 rounded-lg'>
-                    <i className="fa-solid fa-pen"></i>
+                    <i className="fa-solid fa-location-arrow"></i>
                     </button>
                 </div>
               </li>

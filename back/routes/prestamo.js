@@ -4,6 +4,8 @@ import Prestamo from '../models/Prestamo.js';
 import {consultaLibrosPeriodoTiempo} from '../queries.js';
 
 import { consultaPrestamos } from '../queries.js';
+import Libro from '../models/Libro.js';
+import Trabajador from '../models/Trabajador.js';
 
 const router = express.Router();
 
@@ -47,14 +49,63 @@ router.get('/consultaLibrosPeriodoTiempo', async (req, res) => {
 
 
 //GET: Obtener un préstamo
-router.get('/:prestamoId', async (req, res) => {
+router.get('/:prestamoByUser', async (req, res) => {
     try {
-        const prestamo = await Prestamo.findById(req.params.prestamoId);
-        res.json(prestamo);
+        const prestamo = await Prestamo.find({ IDUsuario: req.params.prestamoByUser });
+
+        const prestamosConInfo = await Promise.all(prestamo.map(async (prestamo) => {
+            const libro = await Libro.findById(prestamo.IDLibro);
+            const trabajador = await Trabajador.findById(prestamo.IDTrabajador);
+
+            return {
+                ...prestamo._doc,
+                libro: libro ? libro.titulo : null,
+                trabajador: trabajador ? trabajador.nombre + " " + trabajador.apellido : null
+            };
+        }));
+        console.log(prestamosConInfo)
+        res.json(prestamosConInfo);
     } catch (error) {
         res.json({ message: error });
     }
 });
+
+// GET: Obtener el conteo de préstamos por estado
+router.get('/usuario/:prestamoByUser', async (req, res) => {
+    try {
+        const prestamos = await Prestamo.aggregate([
+            { $match: { IDUsuario: req.params.prestamoByUser } },
+            {
+                $group: {
+                    _id: '$estadoPrestamo',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        // Inicializar el resultado con todos los estados en 0
+        const resultado = {
+            Multa: 0,
+            Activo: 0,
+            Devuelto: 0
+        };
+
+        // Asignar los conteos a los estados correspondientes
+        prestamos.forEach(prestamo => {
+            if (resultado.hasOwnProperty(prestamo._id)) {
+                resultado[prestamo._id] = prestamo.count;
+            }
+        });
+
+        console.log(resultado);
+        res.json(resultado);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 
 //POST: Crear un préstamo
 router.post('/', async (req, res) => {

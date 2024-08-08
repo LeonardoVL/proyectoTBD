@@ -1,17 +1,41 @@
 import express from 'express';
 import Trabajador from '../models/Trabajador.js';
+import TipoUsuario from '../models/TipoUsuario.js';
+import EstadoUsuario from '../models/EstadoUsuario.js';
 
 const router = express.Router();
 
 //GET: Obtener todos los trabajadores
 router.get('/', async (req, res) => {
+    // try {
+    //     const trabajadores = await Trabajador.find();
+    //     res.json(trabajadores);
+    // } catch (error) {
+    //     res.json({ message: error });
+    // }
     try {
-        const trabajadores = await Trabajador.find();
-        res.json(trabajadores);
+        const workers = await Trabajador.find();
+
+        const workersWithTypes = await Promise.all(workers.map(async (worker) => {
+            const tipoUsuario = await TipoUsuario.findById(worker.IDTipoUsuario);
+            const tipoEstado = await EstadoUsuario.findById(worker.IDTipoEstado);
+            console.log(tipoEstado)
+
+            return {
+                ...worker._doc,  // Desestructurar los campos del usuario
+                tipoUsuarioNombre: tipoUsuario ? tipoUsuario.tipoUsuario : null,
+                tipoEstadoNombre: tipoEstado ? tipoEstado.tipoUsuario : null,
+            };
+        }));
+
+        res.json(workersWithTypes);
     } catch (error) {
-        res.json({ message: error });
+        res.status(500).json({ message: error.message });
     }
 });
+
+//make the same changes as in usuario.js about the querie get
+
 
 //GET: Obtener un trabajador
 router.get('/:trabajadorId', async (req, res) => {

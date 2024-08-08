@@ -60,14 +60,18 @@ router.delete('/', async (req, res) => {
     }
 });
 
-//DELETE: Eliminar un tipo de usuario
+// DELETE: Eliminar un tipo de usuario
 router.delete('/:tipoUsuarioId', async (req, res) => {
     try {
-        const removedTipoUsuario = await TipoUsuario.remove({ _id: req.params.tipoUsuarioId });
-        res.json(removedTipoUsuario);
+        const removedTipoUsuario = await TipoUsuario.findByIdAndDelete(req.params.tipoUsuarioId);
+        if (!removedTipoUsuario) {
+            return res.status(404).json({ message: 'Tipo de usuario no encontrado' });
+        }
+        res.status(200).json({ message: 'Tipo de usuario eliminado', data: removedTipoUsuario });
     } catch (error) {
-        res.json({ message: error });
+        res.status(500).json({ message: error.message });
     }
 });
+
 
 export default router;
