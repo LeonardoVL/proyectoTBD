@@ -15,7 +15,7 @@ export async function consultaLibrosPeriodoTiempo(fechaInicio, fechaFin) {
             {
                 $match: {
                     fechaSalida: { $gte: new Date(fechaInicio), $lte: new Date(fechaFin) },
-                    estadoPrestamo: { $in: ["Activo", "Devuelto"] }
+                    estadoPrestamo: { $in: ["Activo", "Devuelto", "Multa"] }
                 }
             },
             {
@@ -23,6 +23,10 @@ export async function consultaLibrosPeriodoTiempo(fechaInicio, fechaFin) {
                     activos: [
                         { $match: { estadoPrestamo: "Activo" } },
                         { $count: "totalActivos" }
+                    ],
+                    multados: [
+                        { $match: { estadoPrestamo: "Multa" } },
+                        { $count: "totalMultados" }
                     ],
                     devueltos: [
                         { $match: { estadoPrestamo: "Devuelto" } },
