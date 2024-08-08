@@ -1,0 +1,25 @@
+---
+import Navbar from "../../components/Navbar.astro"
+import Layout from "../../layout/Layout.astro"
+
+import axios from "axios"
+
+import AddPublisherBook from "../../components/AddPublisherBook"
+import AddBookAuthor from "../../components/AddBookAuthor"
+import AddBookCategory from "../../components/AddBookCategory"
+import AddBook from "../../components/AddBook"
+import BookList from "../../components/BookList"
+---
+
+<Layout title="Personal">
+    <Navbar />
+    <div class="mx-auto max-w-screen-xl mt-8 mb-10">
+      <div class="grid grid-cols-12 gap-5">
+        <AddBook />
+        <AddPublisherBook />
+        <AddBookAuthor />
+        <AddBookCategory />
+        <BookList />
+      </div>
+    </div>
+</Layout>
