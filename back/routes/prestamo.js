@@ -1,5 +1,8 @@
 import express from 'express';
 import Prestamo from '../models/Prestamo.js';
+
+import {consultaLibrosPeriodoTiempo} from '../queries.js';
+
 import { consultaPrestamos } from '../queries.js';
 
 const router = express.Router();
@@ -22,6 +25,26 @@ router.get('/', async (req, res) => {
         res.json({message : error});
     }
 });
+
+
+
+//GET: Luis -- INICIO
+router.get('/consultaLibrosPeriodoTiempo', async (req, res) => {
+    const fechaInicio = req.query.fechaInicio + "T00:00:00.000Z"; // Añadir tiempo para ISODate
+    const fechaFin = req.query.fechaFin + "T23:58:59.999Z"; // Añadir tiempo para ISODate
+
+    console.log('Fecha Inicio:', fechaInicio);
+    console.log('Fecha Fin:', fechaFin);
+
+    try {
+        const prestamos = await consultaLibrosPeriodoTiempo(fechaInicio, fechaFin);
+        res.json(prestamos);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+//GET: Luis  -- FINAL
+
 
 //GET: Obtener un préstamo
 router.get('/:prestamoId', async (req, res) => {
