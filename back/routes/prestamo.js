@@ -1,15 +1,25 @@
 import express from 'express';
 import Prestamo from '../models/Prestamo.js';
+import { consultaPrestamos } from '../queries.js';
 
 const router = express.Router();
 
 //GET: Obtener todos los préstamos
 router.get('/', async (req, res) => {
+    const dniUsuario = req.query.usuario;
+    const libroNombre = req.query.libroNombre;
+    const libroCategoria = req.query.libroCategoria;
+    const libroEditorial = req.query.libroEditorial;
+    const libroAutor = req.query.libroAutor;
+    const fecPrestInicio = req.query.fecPrestInicio;
+    const fecPrestFin = req.query.fecPrestFin;
+    const fecDevInicio = req.query.fecDevInicio;
+    const fecDevFin = req.query.fecDevFin;
     try {
-        const prestamos = await Prestamo.find();
-        res.json(prestamos);
-    } catch (error) {
-        res.json({ message: error });
+        const data = await consultaPrestamos(dniUsuario, libroNombre, libroCategoria, libroEditorial, libroAutor, fecPrestInicio, fecPrestFin, fecDevInicio, fecDevFin);
+        res.json(data);
+    } catch(error){
+        res.json({message : error});
     }
 });
 
