@@ -17,10 +17,10 @@ import LoanPerCategory from "../../components/LoanPerCategory"
         <Title title={"Gestión de Préstamos"} />
         <div class="grid grid-cols-12 gap-5">
             <AddLoan />
-            <LoanChart />
+            <LoanChart client:load />
             <LoanList />
-            <LoanDateChart subtitle="Préstamos por facultad" content="otro gráfico circular xd" />
-            <LoanDateChart subtitle="Índice de préstamos devueltos" content="y otro más dx" />
+            <LoanDateChart subtitle="Préstamos por facultad" />
+            <LoanDateChart subtitle="Índice de préstamos devueltos" />
             <LoanPerCategory />
         </div>
     </div>
