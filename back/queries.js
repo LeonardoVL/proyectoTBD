@@ -166,9 +166,11 @@ export async function listarLibros({ titulo, autor, categoria }) {
         return libros;
     } catch (error) {
         throw new Error('Error al realizar la consulta: ' + error.message);
+    }
+}
 
 // Funcion extra para actualizar estado a multa
-async function actualizarEstadoMulta(prestamos){
+export async function actualizarEstadoMulta(prestamos){
     const fechaActualUTC = DateTime.utc();
     
     for(let prestamo of prestamos){
