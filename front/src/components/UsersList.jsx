@@ -63,9 +63,11 @@ const UsersList = () => {
                   </div>
                 </div>
                 <div className='w-full flex justify-center'>
-                    <button className=' bg-sky-500 text-white px-2 rounded-lg'>
+                    <a 
+                    href={`http://localhost:4321/usuario/${user._id}`}
+                    className=' bg-sky-500 text-white px-2 rounded-lg flex items-center'>
                     <i className="fa-solid fa-location-arrow"></i>
-                    </button>
+                    </a>
                 </div>
               </li>
             ))}

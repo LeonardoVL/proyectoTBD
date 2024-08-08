@@ -19,14 +19,12 @@ import WorkersList from "../components/WorkersList"
     <div class="mx-auto max-w-screen-xl mt-8 mb-10">
       <Title title={"Gestión de Usuarios"} />
       <div class="grid grid-cols-12 gap-5">
-        <AddUser />
-        <AddTypeUser />
-        <AddWorker />
-        <AddStateUser />
-        <UsersList />
-        <WorkersList />
-
-
+        <AddUser client:load />
+        <AddTypeUser client:load />
+        <AddWorker client:load />
+        <AddStateUser client:load />
+        <UsersList client:load />
+        <WorkersList client:load />
       </div>
     </div>
 </Layout>
