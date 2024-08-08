@@ -1,5 +1,6 @@
 import express from 'express';
 import Usuario from '../models/Usuario.js';
+import { calcularMulta } from '../queries.js';
 
 const router = express.Router();
 
@@ -9,6 +10,16 @@ router.get('/', async (req, res) => {
         const users = await Usuario.find();
         res.json(users);
     } catch (error) {
+        res.json({ message: error });
+    }
+});
+
+router.get('/multas', async (req, res) => {
+    try{
+        const dniUsuario = req.query.usuario;
+        const data = await calcularMulta(dniUsuario);
+        res.json(data);
+    }catch(error){
         res.json({ message: error });
     }
 });
