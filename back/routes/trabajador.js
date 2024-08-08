@@ -38,9 +38,9 @@ router.get('/', async (req, res) => {
 
 
 //GET: Obtener un trabajador
-router.get('/:trabajadorId', async (req, res) => {
+router.get('/:correo', async (req, res) => {
     try {
-        const trabajador = await Trabajador.findById(req.params.trabajadorId);
+        const trabajador = await Trabajador.findOne({correoTrabajador: req.params.correo});
         res.json(trabajador);
     } catch (error) {
         res.json({ message: error });

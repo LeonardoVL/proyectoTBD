@@ -1,11 +1,11 @@
 import React from 'react'
 import SubTitle from './SubTitle'
-import PieChart from './PieChart'
+import PieChartFacultad from './PieChartFacultad'
 
-const LoanDateChart = (props) => {
+const LoanDateChartFacultad = () => {
     return(
         <div className='col-span-6 p-4 bg-[#FFFFF0] rounded-md drop-shadow-md'>
-            <SubTitle subtitle={props.subtitle} />
+            <SubTitle subtitle={"Prestamos por Facultad"} />
             <form className='flex mb-5'>
                 <div className='w-full'>
                     <div className='gap-x-4 gap-y-2 flex flex-col grow'>
@@ -31,9 +31,9 @@ const LoanDateChart = (props) => {
                     </button>
                 </div>
             </form>
-            <PieChart />
+            <PieChartFacultad />
         </div>
     )
 }
 
-export default LoanDateChart
+export default LoanDateChartFacultad
