@@ -17,7 +17,7 @@ import LoanPerCategory from "../../components/LoanPerCategory"
     <div class="mx-auto max-w-screen-xl mt-8 mb-10">
         <Title title={"Gestión de Préstamos"} />
         <div class="grid grid-cols-12 gap-5">
-            <AddLoan />
+            <AddLoan client:load />
             <LoanChart client:load />
             <LoanList />
             <LoanDateChartFacultad client:load />
