@@ -1,5 +1,6 @@
 import React from 'react'
 import SubTitle from './SubTitle'
+import PieChart from './PieChart'
 
 const LoanDateChart = (props) => {
     return(
@@ -30,7 +31,7 @@ const LoanDateChart = (props) => {
                     </button>
                 </div>
             </form>
-            {props.content}
+            <PieChart />
         </div>
     )
 }
