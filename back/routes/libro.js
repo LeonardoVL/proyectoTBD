@@ -1,5 +1,7 @@
 import express from 'express';
 import Libro from '../models/Libro.js';
+import {consultaFacultad} from '../queries.js';
+import {listarLibros} from '../queries.js';
 
 const router = express.Router();
 
@@ -10,6 +12,31 @@ router.get('/', async (req, res) => {
         res.json(libros);
     } catch (error) {
         res.json({ message: error });
+    }
+});
+
+//GET: Obtener libros por facultad de cada usuario que prestó
+router.get('/facultad', async (req, res) => {
+    try {
+        const libroFacu = await consultaFacultad();
+        res.json(libroFacu);
+    } catch (error) {
+        res.json({ message: error });
+    }
+});
+
+// GET: Obtener libros por parámetro ingresado
+router.get('/parametrico', async (req, res) => {
+    try {
+        const terminoValidacion = req.query.terminoValidacion;
+        const titulo = terminoValidacion;
+        const autor = terminoValidacion;
+        const categoria = terminoValidacion;
+        const libroParam = await listarLibros({ titulo, autor, categoria });
+        res.json(libroParam);
+    } catch (error) {
+        console.error('Error al realizar la consulta:', error.message);
+        res.status(500).json({ message: 'Error al realizar la consulta', error: error.message });
     }
 });
 
@@ -32,7 +59,6 @@ router.post('/', async (req, res) => {
         IDCategoria: req.body.IDCategoria,
         IDEditorial: req.body.IDEditorial,
         anioPublicacion: req.body.anioPublicacion,
-        facultad: req.body.facultad,
         ejemplaresTotales: req.body.ejemplaresTotales,
         edicion: req.body.edicion,
         numeroPaginas: req.body.numeroPaginas,
@@ -60,7 +86,6 @@ router.put('/:libroId', async (req, res) => {
                 IDCategoria: req.body.IDCategoria,
                 IDEditorial: req.body.IDEditorial,
                 anioPublicacion: req.body.anioPublicacion,
-                facultad: req.body.facultad,
                 ejemplaresTotales: req.body.ejemplaresTotales,
                 edicion: req.body.edicion,
                 numeroPaginas: req.body.numeroPaginas,

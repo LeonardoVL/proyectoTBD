@@ -15,6 +15,7 @@ const PrestamoSchema = new mongoose.Schema({
     },
     fechaSalida: {
         type: Date,
+        default: Date.now,
         required: true
     },
     fechaMaxDevolucion: {
@@ -23,10 +24,11 @@ const PrestamoSchema = new mongoose.Schema({
     },
     fechaDevolucion: {
         type: Date,
-        required: true
+        required: false
     },
-    estadoDevolucion: {
+    estadoPrestamo: {
         type: String,
+        default: 'Activo',
         required: true
     },
     deterioro: {

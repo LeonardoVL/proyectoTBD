@@ -1,23 +1,35 @@
 import express from 'express';
 import Prestamo from '../models/Prestamo.js';
-import {consulta5} from '../queries.js';
+
+import {consultaLibrosPeriodoTiempo} from '../queries.js';
+
+import { consultaPrestamos } from '../queries.js';
 
 const router = express.Router();
 
 //GET: Obtener todos los préstamos
 router.get('/', async (req, res) => {
+    const dniUsuario = req.query.usuario;
+    const libroNombre = req.query.libroNombre;
+    const libroCategoria = req.query.libroCategoria;
+    const libroEditorial = req.query.libroEditorial;
+    const libroAutor = req.query.libroAutor;
+    const fecPrestInicio = req.query.fecPrestInicio;
+    const fecPrestFin = req.query.fecPrestFin;
+    const fecDevInicio = req.query.fecDevInicio;
+    const fecDevFin = req.query.fecDevFin;
     try {
-        const prestamos = await Prestamo.find();
-        res.json(prestamos);
-    } catch (error) {
-        res.json({ message: error });
+        const data = await consultaPrestamos(dniUsuario, libroNombre, libroCategoria, libroEditorial, libroAutor, fecPrestInicio, fecPrestFin, fecDevInicio, fecDevFin);
+        res.json(data);
+    } catch(error){
+        res.json({message : error});
     }
 });
 
 
 
 //GET: Luis -- INICIO
-router.get('/consulta5', async (req, res) => {
+router.get('/consultaLibrosPeriodoTiempo', async (req, res) => {
     const fechaInicio = req.query.fechaInicio + "T00:00:00.000Z"; // Añadir tiempo para ISODate
     const fechaFin = req.query.fechaFin + "T23:58:59.999Z"; // Añadir tiempo para ISODate
 
@@ -25,7 +37,7 @@ router.get('/consulta5', async (req, res) => {
     console.log('Fecha Fin:', fechaFin);
 
     try {
-        const prestamos = await consulta5(fechaInicio, fechaFin);
+        const prestamos = await consultaLibrosPeriodoTiempo(fechaInicio, fechaFin);
         res.json(prestamos);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -53,7 +65,7 @@ router.post('/', async (req, res) => {
         fechaSalida: req.body.fechaSalida,
         fechaMaxDevolucion: req.body.fechaMaxDevolucion,
         fechaDevolucion: req.body.fechaDevolucion,
-        estadoDevolucion: req.body.estadoDevolucion,
+        estadoPrestamo: req.body.estadoPrestamo,
         deterioro: req.body.deterioro
     });
 
@@ -77,7 +89,7 @@ router.put('/:prestamoId', async (req, res) => {
                 fechaSalida: req.body.fechaSalida,
                 fechaMaxDevolucion: req.body.fechaMaxDevolucion,
                 fechaDevolucion: req.body.fechaDevolucion,
-                estadoDevolucion: req.body.estadoDevolucion,
+                estadoPrestamo: req.body.estadoPrestamo,
                 deterioro: req.body.deterioro
             } }
         );
