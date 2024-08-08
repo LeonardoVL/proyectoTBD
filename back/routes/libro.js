@@ -58,9 +58,10 @@ router.get('/prestamos/portrabajadornombre', async (req, res) => {
 });
 
 // GET: Porcentaje general de libros prestados y disponibles
-router.get('/libros/porcentaje', async (req, res) => {
+router.get('/porcentaje', async (req, res) => {
     try {
         const porcentajeLibros = await obtenerPorcentajeLibros();
+        console.log(porcentajeLibros)
         res.json(porcentajeLibros);
     } catch (error) {
         console.error('Error al realizar la consulta:', error.message);

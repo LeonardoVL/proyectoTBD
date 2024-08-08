@@ -6,7 +6,8 @@ import Layout from "../../layout/Layout.astro"
 import AddLoan from "../../components/AddLoan"
 import LoanChart from "../../components/LoanChart"
 import LoanList from "../../components/LoanList"
-import LoanDateChart from "../../components/LoanDateChart"
+import LoanDateChartFacultad from "../../components/LoanDateChartFacultad"
+import LoanDateChartPrestamos from "../../components/LoanDateChartPrestamos"
 import LoanPerCategory from "../../components/LoanPerCategory"
 
 ---
@@ -19,9 +20,9 @@ import LoanPerCategory from "../../components/LoanPerCategory"
             <AddLoan />
             <LoanChart client:load />
             <LoanList />
-            <LoanDateChart subtitle="Préstamos por facultad" />
-            <LoanDateChart subtitle="Índice de préstamos devueltos" />
-            <LoanPerCategory />
+            <LoanDateChartFacultad client:load />
+            <LoanDateChartPrestamos client:load />
+            <!-- <LoanPerCategory client:load /> -->
         </div>
     </div>
 </Layout>

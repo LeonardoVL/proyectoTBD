@@ -442,11 +442,11 @@ export const obtenerPorcentajeLibros = async () => {
         const porcentajeDisponibles = (librosDisponibles / totalEjemplares) * 100;
 
         return {
-            totalEjemplares,
+            // totalEjemplares,
             librosPrestados,
             librosDisponibles,
-            porcentajePrestados: porcentajePrestados.toFixed(2),
-            porcentajeDisponibles: porcentajeDisponibles.toFixed(2)
+            // porcentajePrestados: porcentajePrestados.toFixed(2),
+            // porcentajeDisponibles: porcentajeDisponibles.toFixed(2)
         };
     } catch (error) {
         throw new Error(`Error al realizar la consulta: ${error.message}`);
