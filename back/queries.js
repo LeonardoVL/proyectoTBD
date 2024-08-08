@@ -8,7 +8,7 @@ import TipoUsuario from './models/TipoUsuario.js';
 import Trabajador from './models/Trabajador.js';
 import Usuario from './models/Usuario.js';
 
-import { DateTime } from 'luxon';
+//import { DateTime } from 'luxon';
 
 export async function consultaLibrosPeriodoTiempo(fechaInicio, fechaFin) {
     try {
@@ -51,38 +51,26 @@ export async function consultaFacultad() {
         const prestamosPorFacultad = await Prestamo.aggregate([
             {
                 $lookup: {
-                    from: 'Libro',
-                    let: { libroId: { $toObjectId: "$IDLibro" } },
-                    pipeline: [
-                        { $match: { $expr: { $eq: ["$_id", "$$libroId"] } } }
-                    ],
-                    as: 'libroInfo'
-                }
-            },
-            {
-                $unwind: "$libroInfo"
-            },
-            {
-                $lookup: {
                     from: 'Usuario',
                     let: { usuarioId: { $toObjectId: "$IDUsuario" } },
                     pipeline: [
-                        { $match: { $expr: { $eq: ["$_id", "$$usuarioId"] } } }
+                        { $match: { $expr: { $eq: ["$_id", "$$usuarioId"] } } },
+                        { $project: { facultad: 1 } } // Solo para obtener la facultad
                     ],
                     as: 'usuarioInfo'
                 }
             },
             {
-                $unwind: "$usuarioInfo"
+                $unwind: "$usuarioInfo" // Desenreda el array usuarioInfo para acceder a la facultad
             },
             {
                 $group: {
-                    _id: "$usuarioInfo.facultad",
-                    totalPrestamos: { $sum: 1 }
+                    _id: "$usuarioInfo.facultad", // Agrupa por la facultad obtenida
+                    totalPrestamos: { $sum: 1 } // Cuenta el número de préstamos para esa facultad
                 }
             },
             {
-                $sort: { totalPrestamos: -1 }
+                $sort: { totalPrestamos: -1 } // Ordena de mayor a menor por número de préstamos
             }
         ]);
 
