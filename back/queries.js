@@ -7,7 +7,6 @@ import Prestamo from './models/Prestamo.js';
 import TipoUsuario from './models/TipoUsuario.js';
 import Trabajador from './models/Trabajador.js';
 import Usuario from './models/Usuario.js';
-
 import { DateTime } from 'luxon';
 
 export async function consultaLibrosPeriodoTiempo(fechaInicio, fechaFin) {
@@ -93,6 +92,7 @@ export async function consultaFacultad() {
 }
 
 // Consulta 6 Función
+
 export async function listarLibros({ titulo, autor, categoria }) {
     try {
         const pipeline = [];
@@ -170,109 +170,112 @@ export async function listarLibros({ titulo, autor, categoria }) {
 }
 
 // Funcion extra para actualizar estado a multa
-export async function actualizarEstadoMulta(prestamos){
+
+export async function actualizarEstadoMulta(prestamos) {
     const fechaActualUTC = DateTime.utc();
-    
-    for(let prestamo of prestamos){
-        const itemFecMaxDev = DateTime.fromJSDate(prestamo.fechaMaxDevolucion, { zone : 'utc' });
-        if(itemFecMaxDev.toISO() < fechaActualUTC.toISO()){
+
+    for (let prestamo of prestamos) {
+        const itemFecMaxDev = DateTime.fromJSDate(prestamo.fechaMaxDevolucion, { zone: 'utc' });
+        if (itemFecMaxDev.toISO() < fechaActualUTC.toISO()) {
             prestamo.estadoPrestamo = 'Multa';
             await prestamo.save();
         }
     }
 }
 
-export async function consultaPrestamos(dniUsuario = null, libroNombre = null, libroCategoria = null, libroEditorial = null, libroAutor = null, fecPrestInicio = null, fecPrestFin = null, fecDevInicio = null, fecDevFin = null){
-    try{
+export async function consultaPrestamos(dniUsuario = null, libroNombre = null, libroCategoria = null, libroEditorial = null, libroAutor = null, fecPrestInicio = null, fecPrestFin = null, fecDevInicio = null, fecDevFin = null) {
+    try {
         let consultaPrestamo = {}, consultaLibro = {};
 
         let usuario = null, libros = null, categoria = null, editorial = null, autor = null;
-        if(dniUsuario){
-            try{
-                usuario = await Usuario.findOne({ DNI : dniUsuario});
-                if(!usuario) return {message : 'No se encontró usuario'};
+        if (dniUsuario) {
+            try {
+                usuario = await Usuario.findOne({ DNI: dniUsuario });
+                if (!usuario) return { message: 'No se encontró usuario' };
                 consultaPrestamo.IDUsuario = usuario._id;
-            }catch(error){throw new Error('Error al buscar usuario: ' + error.message);}
+            } catch (error) { throw new Error('Error al buscar usuario: ' + error.message); }
         }
 
-        if(libroCategoria){
-            try{
-                categoria = await Categoria.findOne({ nombre :  libroCategoria});
-                if(!categoria) return {message : 'No se encontró categoría'};
+        if (libroCategoria) {
+            try {
+                categoria = await Categoria.findOne({ nombre: libroCategoria });
+                if (!categoria) return { message: 'No se encontró categoría' };
                 consultaLibro.IDCategoria = categoria._id;
-            }catch(error){throw new Error('Error al buscar categoría: ' + error.message);}
+            } catch (error) { throw new Error('Error al buscar categoría: ' + error.message); }
         }
 
-        if(libroEditorial){
-            try{
-                editorial = await Editorial.findOne({ nombre :  libroEditorial});
-                if(!editorial) return {message : 'No se encontró editorial'};
+        if (libroEditorial) {
+            try {
+                editorial = await Editorial.findOne({ nombre: libroEditorial });
+                if (!editorial) return { message: 'No se encontró editorial' };
                 consultaLibro.IDEditorial = editorial._id;
-            }catch(error){throw new Error('Error al buscar editorial: ' + error.message);}
+            } catch (error) { throw new Error('Error al buscar editorial: ' + error.message); }
         }
-        if(libroAutor){
-            try{
-                autor = await Autor.findOne({ nombre :  libroAutor});
-                if(!autor) return {message : 'No se encontró autor'};
+        if (libroAutor) {
+            try {
+                autor = await Autor.findOne({ nombre: libroAutor });
+                if (!autor) return { message: 'No se encontró autor' };
                 consultaLibro.IDAutor = autor._id;
-            }catch(error){throw new Error('Error al buscar autor: ' + error.message);}
+            } catch (error) { throw new Error('Error al buscar autor: ' + error.message); }
         }
 
-        if(libroNombre || libroCategoria || libroEditorial || libroAutor){
-            if(libroNombre) consultaLibro.titulo = libroNombre;
-            try{
+        if (libroNombre || libroCategoria || libroEditorial || libroAutor) {
+            if (libroNombre) consultaLibro.titulo = libroNombre;
+            try {
                 libros = await Libro.find(consultaLibro);
-                if(libros.length == 0){ return {message : 'No se encontró libro'}; } 
-                const idLibros = libros.map(libro => libro._id); 
-                consultaPrestamo.IDLibro = {$in : idLibros};
-            }catch(error){throw new Error('Error al buscar libro: ' + error.message);}
+                if (libros.length == 0) { return { message: 'No se encontró libro' }; }
+                const idLibros = libros.map(libro => libro._id);
+                consultaPrestamo.IDLibro = { $in: idLibros };
+            } catch (error) { throw new Error('Error al buscar libro: ' + error.message); }
         }
 
-        if(fecPrestInicio){
-            const fecPrestInicioUTC = DateTime.fromISO(fecPrestInicio, { zone : 'utc' });
+        if (fecPrestInicio) {
+            const fecPrestInicioUTC = DateTime.fromISO(fecPrestInicio, { zone: 'utc' });
             consultaPrestamo.fechaSalida = {
                 ...consultaPrestamo.fechaSalida,
-                $gte : fecPrestInicioUTC.toISO()
+                $gte: fecPrestInicioUTC.toISO()
             };
         }
 
-        if(fecPrestFin){
-            const fecPrestFinUTC = DateTime.fromISO(fecPrestFin, { zone : 'utc' });
-            fecPrestFinUTC = fecPrestFinUTC.set({ hour : 23, minute : 59, second : 59, millisecond : 999 });
+        if (fecPrestFin) {
+            const fecPrestFinUTC = DateTime.fromISO(fecPrestFin, { zone: 'utc' });
+            fecPrestFinUTC = fecPrestFinUTC.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
             consultaPrestamo.fechaSalida = {
                 ...consultaPrestamo.fechaSalida,
-                $lte : fecPrestFinUTC.toISO()
+                $lte: fecPrestFinUTC.toISO()
             };
         }
-        
-        if(fecDevInicio){
-            const fecDevInicioUTC = DateTime.fromISO(fecDevInicio, { zone : 'utc' });
+
+        if (fecDevInicio) {
+            const fecDevInicioUTC = DateTime.fromISO(fecDevInicio, { zone: 'utc' });
             consultaPrestamo.fechaMaxDevolucion = {
                 ...consultaPrestamo.fechaMaxDevolucion,
-                $gte : fecDevInicioUTC.toISO()};
+                $gte: fecDevInicioUTC.toISO()
+            };
         }
-        if(fecDevFin){
-            let fecDevFinUTC = DateTime.fromISO(fecDevFin, { zone : 'utc' });
-            fecDevFinUTC = fecDevFinUTC.set({ hour : 23, minute : 59, second : 59, millisecond : 999 });
+        if (fecDevFin) {
+            let fecDevFinUTC = DateTime.fromISO(fecDevFin, { zone: 'utc' });
+            fecDevFinUTC = fecDevFinUTC.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
             consultaPrestamo.fechaMaxDevolucion = {
                 ...consultaPrestamo.fechaMaxDevolucion,
-                $lte : fecDevFinUTC.toISO()};
+                $lte: fecDevFinUTC.toISO()
+            };
         }
 
         const prestamos = await Prestamo.find(consultaPrestamo);
         actualizarEstadoMulta(prestamos);
         return prestamos;
-    }catch(error){
+    } catch (error) {
         throw new Error('Error al buscar préstamos: ' + error.message);
     }
 }
 
-export async function calcularMulta(dniUsuario){
-    try{
+export async function calcularMulta(dniUsuario) {
+    try {
         const usuario = await Usuario.findOne({ DNI: dniUsuario });
-        if(!usuario) return { message : 'Usuario no encontrado', multa : 0 };
-        
-        const prestamos = await Prestamo.find({ IDUsuario : usuario._id });
+        if (!usuario) return { message: 'Usuario no encontrado', multa: 0 };
+
+        const prestamos = await Prestamo.find({ IDUsuario: usuario._id });
         actualizarEstadoMulta(prestamos);
         const prestamosMulta = prestamos.filter(prestamo => prestamo.estadoPrestamo === 'Multa');
 
@@ -280,24 +283,168 @@ export async function calcularMulta(dniUsuario){
 
         let totalMulta = 0;
         let multa = 15;
-        for(let prestamo of prestamosMulta){
+        for (let prestamo of prestamosMulta) {
             const itemFecMaxDevDateTime = DateTime.fromJSDate(prestamo.fechaMaxDevolucion, { zone: 'utc' });
             const diasRetraso = fechaActualUTC.diff(itemFecMaxDevDateTime, 'days').days;
-            if(diasRetraso < 3) totalMulta += multa;
-            else if(diasRetraso < 7) totalMulta += multa * 2;
+            if (diasRetraso < 3) totalMulta += multa;
+            else if (diasRetraso < 7) totalMulta += multa * 2;
             else totalMulta += multa * 3;
-            
-            if(prestamo.deterioro != 'NO'){
+
+            if (prestamo.deterioro != 'NO') {
                 const libro = await Libro.findById(prestamo.IDLibro);
-                if(libro){
+                if (libro) {
                     totalMulta += libro.precioLibro * (prestamo.deterioro == 'LEVE' ? 0.1 : 1);
                 }
             }
         }
 
-        return {prestamosMulta, multa : totalMulta};
+        return { prestamosMulta, multa: totalMulta };
 
-    }catch(error){
+    } catch (error) {
         throw new Error("Error al calcular multa: " + error);
     }
+
 }
+
+//  Consulta 2 : Numeros de libros prestados por categorias
+
+export const obtenerPrestamosPorCategoria = async (categoria) => {
+    try {
+        const prestamosConLibroInfo = await Prestamo.aggregate([
+            {
+                $lookup: {
+                    from: 'Libro', 
+                    let: { libroId: { $toObjectId: "$IDLibro" } }, 
+                    pipeline: [
+                        { $match: { $expr: { $eq: ["$_id", "$$libroId"] } } }
+                    ],
+                    as: 'libroInfo' 
+                }
+            },
+            {
+                $unwind: '$libroInfo'
+            },
+            {
+                $lookup: {
+                    from: 'Categoria', 
+                    let: { categoriaId: { $toObjectId: "$libroInfo.IDCategoria" } },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ["$_id", "$$categoriaId"] } } }
+                    ],
+                    as: 'categoriaInfo' 
+                }
+            },
+            {
+                $unwind: '$categoriaInfo'
+            },
+            {
+                $match: categoria ? { 'categoriaInfo.nombre': categoria } : {} 
+            },
+            {
+                $group: {
+                    _id: '$categoriaInfo.nombre', 
+                    totalPrestados: { $sum: 1 } 
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    categoria: '$_id', 
+                    totalPrestados: 1 
+                }
+            }
+        ]);
+
+        return prestamosConLibroInfo;
+    } catch (error) {
+        throw new Error(`Error al realizar la consulta: ${error.message}`);
+    }
+};
+
+export const obtenerLibrosPrestadosPorTrabajador = async (nombreTrabajador) => {
+    try {
+  
+        const trabajador = await Trabajador.findOne({ nombre: nombreTrabajador });
+
+        if (!trabajador) {
+            throw new Error('Trabajador no encontrado');
+        }
+
+
+        const prestamosPorTrabajador = await Prestamo.aggregate([
+            {
+                $match: {
+                    IDTrabajador: trabajador._id.toString()
+                }
+            },
+            {
+                $lookup: {
+                    from: 'Libro', 
+                    let: { libroId: { $toObjectId: "$IDLibro" } }, 
+                    pipeline: [
+                        { $match: { $expr: { $eq: ["$_id", "$$libroId"] } } }
+                    ],
+                    as: 'libroInfo' 
+                }
+            },
+            {
+                $unwind: '$libroInfo'
+            },
+            {
+                $project: {
+                    _id: 0,
+                    libro: '$libroInfo.titulo', 
+                    fechaSalida: 1
+                }
+            }
+        ]);
+
+        return prestamosPorTrabajador;
+    } catch (error) {
+        throw new Error(`Error al realizar la consulta: ${error.message}`);
+    }
+};
+
+export const obtenerPorcentajeLibros = async () => {
+    try {
+
+        const totalLibros = await Libro.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalEjemplares: { $sum: "$ejemplaresTotales" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalEjemplares: 1
+                }
+            }
+        ]);
+
+
+        const totalPrestamos = await Prestamo.countDocuments();
+
+        if (totalLibros.length === 0) {
+            throw new Error('No se encontraron libros');
+        }
+
+        const totalEjemplares = totalLibros[0].totalEjemplares;
+        const librosPrestados = totalPrestamos;
+        const librosDisponibles = totalEjemplares - librosPrestados;
+
+        const porcentajePrestados = (librosPrestados / totalEjemplares) * 100;
+        const porcentajeDisponibles = (librosDisponibles / totalEjemplares) * 100;
+
+        return {
+            totalEjemplares,
+            librosPrestados,
+            librosDisponibles,
+            porcentajePrestados: porcentajePrestados.toFixed(2),
+            porcentajeDisponibles: porcentajeDisponibles.toFixed(2)
+        };
+    } catch (error) {
+        throw new Error(`Error al realizar la consulta: ${error.message}`);
+    }
+};
