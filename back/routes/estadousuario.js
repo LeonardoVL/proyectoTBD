@@ -67,7 +67,7 @@ router.delete('/', async (req, res) => {
 //DELETE: Eliminar un estado de usuario
 router.delete('/:estadoUsuarioId', async (req, res) => {
     try {
-        const removedEstadoUsuario = await EstadoUsuario.remove({ _id: req.params.estadoUsuarioId });
+        const removedEstadoUsuario = await EstadoUsuario.findByIdAndDelete({ _id: req.params.estadoUsuarioId });
         res.json(removedEstadoUsuario);
     } catch (error) {
         res.json({ message: error });

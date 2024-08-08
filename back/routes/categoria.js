@@ -27,7 +27,7 @@ router.get('/:categoryId', async (req, res) => {
 router.post('/', async (req, res) => {
     const category = new Categoria({
         nombre: req.body.nombre,
-        descripcion: req.body.descripcion
+        descripcion: [req.body.descripcion]
     });
 
     try {
@@ -67,7 +67,7 @@ router.delete('/', async (req, res) => {
 //DELETE: Eliminar una categoría
 router.delete('/:categoryId', async (req, res) => {
     try {
-        const removedCategory = await Categoria.remove({ _id: req.params.categoryId });
+        const removedCategory = await Categoria.findByIdAndDelete({ _id: req.params.categoryId });
         res.json(removedCategory);
     } catch (error) {
         res.json({ message: error });

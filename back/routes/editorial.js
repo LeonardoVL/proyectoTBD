@@ -67,8 +67,11 @@ router.delete('/', async (req, res) => {
 //DELETE: Eliminar una editorial
 router.delete('/:editorialId', async (req, res) => {
     try {
-        const removedEditorial = await Editorial.remove({ _id: req.params.editorialId });
-        res.json(removedEditorial);
+        const removedEditorial = await Editorial.findByIdAndDelete({ _id: req.params.editorialId });
+        if (!removedEditorial) {
+            return res.json({ message: "Editorial not found" });
+        }
+        res.status(200).json({ message: "Editorial deleted" });
     } catch (error) {
         res.json({ message: error });
     }
