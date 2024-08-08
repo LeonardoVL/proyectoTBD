@@ -1,0 +1,27 @@
+---
+
+import Navbar from "../../components/Navbar.astro"
+import Title from "../../components/Title"
+import Layout from "../../layout/Layout.astro"
+import AddLoan from "../../components/AddLoan"
+import LoanChart from "../../components/LoanChart"
+import LoanList from "../../components/LoanList"
+import LoanDateChart from "../../components/LoanDateChart"
+import LoanPerCategory from "../../components/LoanPerCategory"
+
+---
+
+<Layout title="Préstamos">
+    <Navbar />
+    <div class="mx-auto max-w-screen-xl mt-8 mb-10">
+        <Title title={"Gestión de Préstamos"} />
+        <div class="grid grid-cols-12 gap-5">
+            <AddLoan />
+            <LoanChart />
+            <LoanList />
+            <LoanDateChart subtitle="Préstamos por facultad" content="otro gráfico circular xd" />
+            <LoanDateChart subtitle="Índice de préstamos devueltos" content="y otro más dx" />
+            <LoanPerCategory />
+        </div>
+    </div>
+</Layout>
