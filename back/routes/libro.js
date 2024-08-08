@@ -2,6 +2,9 @@ import express from 'express';
 import Libro from '../models/Libro.js';
 import {consultaFacultad} from '../queries.js';
 import {listarLibros} from '../queries.js';
+import { obtenerPrestamosPorCategoria } from '../queries.js';
+import { obtenerLibrosPrestadosPorTrabajador } from '../queries.js'
+import { obtenerPorcentajeLibros } from '../queries.js';
 
 const router = express.Router();
 
@@ -25,6 +28,47 @@ router.get('/facultad', async (req, res) => {
     }
 });
 
+
+// GET: Número de Libros Prestados por Categoría (filtrado por nombre de categoría) 
+// Prueba http://localhost:3000/api/libro/prestamos/libro-info?categoria=Cuento
+router.get('/prestamos/libro-info', async (req, res) => {
+    const { categoria } = req.query; // Obtener el nombre de la categoría del parámetro de consulta
+
+    try {
+        const prestamosConLibroInfo = await obtenerPrestamosPorCategoria(categoria);
+        res.json(prestamosConLibroInfo);
+    } catch (error) {
+        console.error('Error al realizar la consulta:', error.message);
+        res.status(500).json({ message: 'Error al realizar la consulta', error: error.message });
+    }
+});
+
+// GET: Libros prestados por un determinado trabajador por nombre
+//http://localhost:3000/api/libro/prestamos/portrabajadornombre?nombreTrabajador=Gabriela%20Elena
+router.get('/prestamos/portrabajadornombre', async (req, res) => {
+    const { nombreTrabajador } = req.query; // Obtener el parámetro de consulta
+
+    try {
+        const prestamosPorTrabajador = await obtenerLibrosPrestadosPorTrabajador(nombreTrabajador);
+        res.json(prestamosPorTrabajador);
+    } catch (error) {
+        console.error('Error al realizar la consulta:', error.message);
+        res.status(500).json({ message: 'Error al realizar la consulta', error: error.message });
+    }
+});
+
+// GET: Porcentaje general de libros prestados y disponibles
+router.get('/libros/porcentaje', async (req, res) => {
+    try {
+        const porcentajeLibros = await obtenerPorcentajeLibros();
+        res.json(porcentajeLibros);
+    } catch (error) {
+        console.error('Error al realizar la consulta:', error.message);
+        res.status(500).json({ message: 'Error al realizar la consulta', error: error.message });
+    }
+});
+
+
 // GET: Obtener libros por parámetro ingresado
 router.get('/parametrico', async (req, res) => {
     try {
@@ -39,6 +83,9 @@ router.get('/parametrico', async (req, res) => {
         res.status(500).json({ message: 'Error al realizar la consulta', error: error.message });
     }
 });
+
+
+
 
 //GET: Obtener un libro
 router.get('/:libroId', async (req, res) => {
