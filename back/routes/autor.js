@@ -67,7 +67,7 @@ router.delete('/', async (req, res) => {
 //DELETE: Eliminar un autor
 router.delete('/:authorId', async (req, res) => {
     try {
-        const removedAuthor = await Autor.remove({ _id: req.params.authorId });
+        const removedAuthor = await Autor.findByIdAndDelete({ _id: req.params.authorId });
         res.json(removedAuthor);
     } catch (error) {
         res.json({ message: error });

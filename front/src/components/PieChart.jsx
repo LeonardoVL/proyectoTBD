@@ -16,24 +16,12 @@ const PieChart = ({ id }) => {
       const response = await axios.get(`http://localhost:3000/api/prestamo/usuario/${id}`);
       const prestamos = response.data;
       console.log(response.data)
-  
-      // Asegúrate de que prestamos sea un array
-      // if (!Array.isArray(prestamos)) {
-      //   console.error("La respuesta no es un array:", prestamos);
-      //   return;
-      // }
-  
+
       const counts = {
         Excedidos: prestamos.Multa,
         Entregados: prestamos.Devuelto,
         Pendientes: prestamos.Activo,
       };
-  
-      // prestamos.forEach((prestamo) => {
-      //   if (prestamo.estadoPrestamo === 'Multa') counts.Excedidos++;
-      //   if (prestamo.estadoPrestamo === 'Devuelto') counts.Entregados++;
-      //   if (prestamo.estadoPrestamo === 'Activo') counts.Pendientes++;
-      // });
   
       const data = {
         labels: ['Excedidos', 'Entregados', 'Pendientes'],
